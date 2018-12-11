@@ -1,5 +1,6 @@
 body {
     background-color: blue;
+    text-align: center;
 }
 
 #board {
@@ -30,4 +31,11 @@ body {
 
 .winning-square {
     background-color: green;
+}
+
+.play-again{
+    background-color: yellow;
+    margin: 20px;
+    height: 40px;
+    width: 100px;
 }

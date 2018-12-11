@@ -1,7 +1,6 @@
-// ====== Global Variables ======
-// init game as player 1's turn
+
+let gameOn = true;
 let whoseTurn = 1;
-// make an array for both players and push each new square onto the appropriate array
 let playerOneSquares = [];
 let playerTwoSquares = [];
 
@@ -17,38 +16,15 @@ const winningCombos = [
 ];
 
 const squares = document.getElementsByClassName("square");
-
-// squares is an array with 9 objects in it
-// each element is an html button element
-// this will return the window
-// this refers to the element referenced
-// console.log(this);
-
 for(let i = 0; i < squares.length; i++){
-    // console.log(squares[i]);
-    // now that we have all the squares individually (squares[i]),
-    // we can add an event listener to each one
-    // to add event listener:
-    // 1) what to listen to
-    // 2) add the event listener 
-    // 3) first arg: what event to listen for 
-    // 4) second arg: function to run if that event happens
-    // adds listener for EACH INDIVIDUAL SQUARE
     squares[i].addEventListener("click", function(event){
-        // every JS event will give you the event object
-        // console.log(event);
-        // this in JS is the equiv of self in python
-        // this will return the squares[i]
-        // this is the thing clicked on
-        // console.log(this);
-        // check to see if the square is taken
+        if (gameOn){
         if(this.innerHTML === "-"){
-            // it's not taken so see whose turn it is 
             if(whoseTurn === 1){
-                this.innerHTML = "X"; // update the DOM
-                whoseTurn = 2; // update JS
-                document.getElementById("message").innerHTML = "It's O's turn!"; // update the DOM
-                playerOneSquares.push(this.id); // this is referring to squares[i]'s id
+                this.innerHTML = "X";
+                whoseTurn = 2;
+                document.getElementById("message").innerHTML = "It's O's turn!";
+                playerOneSquares.push(this.id);
                 checkWin(playerOneSquares, 1);
             } else {
                 this.innerHTML = "O";
@@ -60,44 +36,60 @@ for(let i = 0; i < squares.length; i++){
         } else{
             document.getElementById("message").innerHTML = "Sorry, this square is taken!!";
         }
+        }
     })
 }
+    
 
 function checkWin(playerSquares, whoMarked){
     console.log("checking to see who won")
-    // console.log(playerSquares);
-    // console.log(whoMarked);
-    // we just know who went
-    // and we know what squares they have
-    // outer loop= check each winning combination
     for(let i = 0; i < winningCombos.length; i++){
-        // keep track of how many squares in THIS combo
         let squareCount = 0;
-        // check each square inside of this winning combo
-        // winningCombos[i] = the winning combo we are on
         for(j = 0; j < winningCombos.length; j++){
-            // winning combos[i][j] = the square in the winningcombo we are on
             const winningSquare = winningCombos[i][j];
             if(playerSquares.includes(winningSquare)){
-                // player has this square
                 squareCount++;
             }
         } if(squareCount === 3){
-            // console.log("player won!")
-            // console.log(winningCombos[i]);
             endGame(winningCombos[i], whoMarked)
         }
     }
 }
 
 function endGame(winningCombo, whoWon){
-    // if we get to end game.... WINNER WINNER, CHICKEN DINNER
-    // so the game is over
     document.querySelector("#message").innerHTML = `CONGRATS TO PLAYER ${whoWon}!`;
-    // we know which squares are the winning squares
+
+    let friendButton = document.createElement("button");
+    friendButton.textContent = "Play Against Your Friend";
+    document.querySelector(".buttons-section").appendChild(friendButton);
+    friendButton.classList.add("play-again");
+
+    let compButton = document.createElement("button");
+    compButton.textContent = "Play Against the Computer";
+    document.querySelector(".buttons-section").appendChild(compButton);
+    compButton.classList.add("play-again");
+    
     for(let i=0; i < winningCombo.length; i++){
         const winningSquare = winningCombo[i];
         const squareElem = document.getElementById(winningSquare);
         squareElem.className += " winning-square";
     }
+    gameOn = false;
 }
+
+
+function playAgain(){
+    gameOn = true;
+    for(let i = 0; i < playerOneSquares; i++){
+        playerOneSquares.pop(i);
+        console.log(playerOneSquares);
+    }
+    for(let i = 0; i < playerTwoSquares; i++){
+        playerTwoSquares.pop(i);
+        console.log(playerTwoSquares);
+    }
+}
+
+// generate computer moves via random numbers and letters
+
+// 
