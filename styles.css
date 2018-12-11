@@ -27,3 +27,7 @@ body {
     font-size: 40px;
     color: yellow;
 }
+
+.winning-square {
+    background-color: green;
+}
