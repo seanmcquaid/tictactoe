@@ -85,6 +85,7 @@ function playAgain(){
     whoseTurn = 1;
     playerOneSquares = [];
     playerTwoSquares = [];
+    document.getElementById("message").innerHTML = "It's X's turn!";
     console.log("start again");
     for(let i = 0; i < squares.length; i++){
         squares[i].innerHTML = "-";
