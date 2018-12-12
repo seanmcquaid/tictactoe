@@ -16,6 +16,12 @@ const winningCombos = [
 
 const squares = document.getElementsByClassName("square");
 
+if(playerOneSquares.length + playerTwoSquares === 9){
+    gameOn = false;
+    playAgain();
+    document.querySelector("#message").innerHTML = `NEITHER PERSON Wins!`;
+}
+
 for(let i = 0; i < squares.length; i++){
     squares[i].addEventListener("click", function(event){
         if (gameOn){
@@ -23,8 +29,10 @@ for(let i = 0; i < squares.length; i++){
                 this.innerHTML = "X";
                 playerOneSquares.push(this.id);
                 checkWin(playerOneSquares, 1);
-                computerMove();
-                checkWin(playerTwoSquares, 2);
+                if(gameOn){
+                    computerMove();
+                    checkWin(playerTwoSquares, 2);
+                } 
             } else{
                 document.getElementById("message").innerHTML = "Sorry, this square is taken!!";
             }
@@ -43,6 +51,7 @@ function checkWin(playerSquares, whoMarked){
             }
         } if(squareCount === 3){
             endGame(winningCombos[i], whoMarked)
+
         }
     }
 }
@@ -64,6 +73,7 @@ function endGame(winningCombo, whoWon){
 
 function playAgain(){
     let computerButton = document.querySelector("#again-button");
+    document.querySelector("#message").innerHTML = " ";
     computerButton.style.visibility = "hidden";
     gameOn = true;
     whoseTurn = 1;
@@ -76,10 +86,10 @@ function playAgain(){
 }
 
 function computerMove() {
-    const letter = ["A", "B", "C"]
-    let randomLet = Math.floor(Math.random() * 3)
-    let randomNum =  Math.ceil(Math.random() * 3)
-    let computerPlay = letter[randomLet] + randomNum.toString()
+        const letter = ["A", "B", "C"];
+        let randomLet = Math.floor(Math.random() * 3);
+        let randomNum =  Math.ceil(Math.random() * 3);
+        let computerPlay = letter[randomLet] + randomNum.toString();
         if(!playerOneSquares.includes(computerPlay) && !playerTwoSquares.includes(computerPlay)){
             playerTwoSquares.push(computerPlay);
             squares[computerPlay].innerHTML = "O";
@@ -88,6 +98,6 @@ function computerMove() {
         }
     }
 
-
 // if board is full and neither player wins, offer the option to start over
+// base this on adding the length of each player squares array
 // generate a nth sized grid?
