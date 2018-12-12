@@ -16,6 +16,7 @@ const winningCombos = [
 ];
 
 const squares = document.getElementsByClassName("square");
+
 for(let i = 0; i < squares.length; i++){
     squares[i].addEventListener("click", function(event){
         if (gameOn){
@@ -57,18 +58,15 @@ function checkWin(playerSquares, whoMarked){
 }
 
 function endGame(winningCombo, whoWon){
-    document.querySelector("#message").innerHTML = `CONGRATS TO PLAYER ${whoWon}!`;
+    document.querySelector("#message").innerHTML = `${whoWon} Wins!`;
 
-    let friendButton = document.createElement("button");
-    friendButton.textContent = "Play Against Your Friend";
-    document.querySelector(".buttons-section").appendChild(friendButton);
-    friendButton.classList.add("play-again");
+    let friendButton = document.querySelector("#friend-button");
+    let computerButton = document.querySelector("#computer-button");
+    // friendButton.style.visiblity = "visible";
+    // computerButton.style.visiblity = "visible";
+    friendButton.addEventListener("click", playAgain);
+    computerButton.addEventListener("click", playAgain);
 
-    let compButton = document.createElement("button");
-    compButton.textContent = "Play Against the Computer";
-    document.querySelector(".buttons-section").appendChild(compButton);
-    compButton.classList.add("play-again");
-    
     for(let i=0; i < winningCombo.length; i++){
         const winningSquare = winningCombo[i];
         const squareElem = document.getElementById(winningSquare);
@@ -79,17 +77,21 @@ function endGame(winningCombo, whoWon){
 
 
 function playAgain(){
+    // let friendButton = document.querySelector("#friend-button");
+    // let computerButton = document.querySelector("#computer-button");
+    // friendButton.style.visiblity = "hidden";
+    // computerButton.style.visiblity = "hidden";
     gameOn = true;
-    for(let i = 0; i < playerOneSquares; i++){
-        playerOneSquares.pop(i);
-        console.log(playerOneSquares);
-    }
-    for(let i = 0; i < playerTwoSquares; i++){
-        playerTwoSquares.pop(i);
-        console.log(playerTwoSquares);
+    whoseTurn = 1;
+    playerOneSquares = [];
+    playerTwoSquares = [];
+    console.log("start again");
+    for(let i = 0; i < squares.length; i++){
+        squares[i].innerHTML = "-";
+        squares[i].classList.remove("winning-square");
     }
 }
 
 // generate computer moves via random numbers and letters
-
-// 
+// if board is full and neither player wins, offer the option to start over
+// generate a nth sized grid?

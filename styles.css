@@ -34,6 +34,7 @@ body {
 }
 
 .play-again{
+    visibility: visible;
     background-color: yellow;
     margin: 20px;
     height: 40px;
