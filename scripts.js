@@ -1,6 +1,5 @@
 
 let gameOn = true;
-let whoseTurn = 1;
 let playerOneSquares = [];
 let playerTwoSquares = [];
 
@@ -20,30 +19,21 @@ const squares = document.getElementsByClassName("square");
 for(let i = 0; i < squares.length; i++){
     squares[i].addEventListener("click", function(event){
         if (gameOn){
-        if(this.innerHTML === "-"){
-            if(whoseTurn === 1){
+            if(this.innerHTML === "-"){
                 this.innerHTML = "X";
-                whoseTurn = 2;
-                document.getElementById("message").innerHTML = "It's O's turn!";
                 playerOneSquares.push(this.id);
                 checkWin(playerOneSquares, 1);
-            } else {
-                this.innerHTML = "O";
-                whoseTurn = 1;
-                document.getElementById("message").innerHTML = "It's X's turn!";
-                playerTwoSquares.push(this.id);
+                computerMove();
                 checkWin(playerTwoSquares, 2);
+            } else{
+                document.getElementById("message").innerHTML = "Sorry, this square is taken!!";
             }
-        } else{
-            document.getElementById("message").innerHTML = "Sorry, this square is taken!!";
-        }
         }
     })
 }
     
 
 function checkWin(playerSquares, whoMarked){
-    console.log("checking to see who won")
     for(let i = 0; i < winningCombos.length; i++){
         let squareCount = 0;
         for(j = 0; j < winningCombos.length; j++){
@@ -59,12 +49,8 @@ function checkWin(playerSquares, whoMarked){
 
 function endGame(winningCombo, whoWon){
     document.querySelector("#message").innerHTML = `${whoWon} Wins!`;
-
-    let friendButton = document.querySelector("#friend-button");
-    let computerButton = document.querySelector("#computer-button");
-    // friendButton.style.visiblity = "visible";
-    // computerButton.style.visiblity = "visible";
-    friendButton.addEventListener("click", playAgain);
+    let computerButton = document.querySelector("#again-button");
+    computerButton.style.visibility = "visible";
     computerButton.addEventListener("click", playAgain);
 
     for(let i=0; i < winningCombo.length; i++){
@@ -77,22 +63,31 @@ function endGame(winningCombo, whoWon){
 
 
 function playAgain(){
-    // let friendButton = document.querySelector("#friend-button");
-    // let computerButton = document.querySelector("#computer-button");
-    // friendButton.style.visiblity = "hidden";
-    // computerButton.style.visiblity = "hidden";
+    let computerButton = document.querySelector("#again-button");
+    computerButton.style.visibility = "hidden";
     gameOn = true;
     whoseTurn = 1;
     playerOneSquares = [];
     playerTwoSquares = [];
-    document.getElementById("message").innerHTML = "It's X's turn!";
-    console.log("start again");
     for(let i = 0; i < squares.length; i++){
         squares[i].innerHTML = "-";
         squares[i].classList.remove("winning-square");
     }
 }
 
-// generate computer moves via random numbers and letters
+function computerMove() {
+    const letter = ["A", "B", "C"]
+    let randomLet = Math.floor(Math.random() * 3)
+    let randomNum =  Math.ceil(Math.random() * 3)
+    let computerPlay = letter[randomLet] + randomNum.toString()
+        if(!playerOneSquares.includes(computerPlay) && !playerTwoSquares.includes(computerPlay)){
+            playerTwoSquares.push(computerPlay);
+            squares[computerPlay].innerHTML = "O";
+        } else {
+            computerMove();
+        }
+    }
+
+
 // if board is full and neither player wins, offer the option to start over
 // generate a nth sized grid?
