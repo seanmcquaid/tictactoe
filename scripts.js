@@ -3,6 +3,8 @@ let gameOn = true;
 let playerOneSquares = [];
 let playerTwoSquares = [];
 
+let filledSquareCount = 0;
+
 const winningCombos = [
     ["A1", "B1", "C1"], // row 1
     ["A2", "B2", "C2"], // row 2
@@ -14,13 +16,9 @@ const winningCombos = [
     ["A3", "B2", "C1"], // diag 2
 ];
 
+
 const squares = document.getElementsByClassName("square");
 
-if(playerOneSquares.length + playerTwoSquares === 9){
-    gameOn = false;
-    playAgain();
-    document.querySelector("#message").innerHTML = `NEITHER PERSON Wins!`;
-}
 
 for(let i = 0; i < squares.length; i++){
     squares[i].addEventListener("click", function(event){
@@ -28,15 +26,19 @@ for(let i = 0; i < squares.length; i++){
             if(this.innerHTML === "-"){
                 this.innerHTML = "X";
                 playerOneSquares.push(this.id);
+                filledSquareCount += 1;
                 checkWin(playerOneSquares, 1);
+                checkTie();
                 if(gameOn){
                     computerMove();
+                    filledSquareCount += 1;
                     checkWin(playerTwoSquares, 2);
+                    checkTie();
                 } 
             } else{
                 document.getElementById("message").innerHTML = "Sorry, this square is taken!!";
             }
-        }
+        } 
     })
 }
     
@@ -71,6 +73,16 @@ function endGame(winningCombo, whoWon){
 }
 
 
+function checkTie(){
+    if(filledSquareCount == 9 && gameOn == true){
+        document.querySelector("#message").innerHTML = `NEITHER PLAYER Wins!`;
+        let computerButton = document.querySelector("#again-button");
+        computerButton.style.visibility = "visible";
+        computerButton.addEventListener("click", playAgain);
+        gameOn = false;
+    }
+}
+
 function playAgain(){
     let computerButton = document.querySelector("#again-button");
     document.querySelector("#message").innerHTML = " ";
@@ -85,6 +97,8 @@ function playAgain(){
     }
 }
 
+// scripts.js:100 Uncaught RangeError: Maximum call stack size exceeded
+
 function computerMove() {
         const letter = ["A", "B", "C"];
         let randomLet = Math.floor(Math.random() * 3);
@@ -94,10 +108,10 @@ function computerMove() {
             playerTwoSquares.push(computerPlay);
             squares[computerPlay].innerHTML = "O";
         } else {
+            // need to fix this recursion that's preventing my logic from running
             computerMove();
         }
     }
-
 // if board is full and neither player wins, offer the option to start over
 // base this on adding the length of each player squares array
 // generate a nth sized grid?
